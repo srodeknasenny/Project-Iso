@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.InputSystem; // Ważne dla nowego systemu!
+using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,28 +16,35 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Ta funkcja jest wywoływana automatycznie przez komponent Player Input,
-    // jeśli w Actions mapa nazywa się "Move" (standard w Unity).
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
     }
 
+    private Vector2 ToIso(Vector2 input)
+    {
+        float x = input.x - input.y;
+        float y = (input.x + input.y) / 2; 
+        return new Vector2(x, y);
+    }
+
     void FixedUpdate()
     {
-        // 1. Wygładzanie ruchu (opcjonalne, ale przyjemniejsze dla oka)
+        Vector2 isoInput = ToIso(moveInput);
+
+        if (isoInput.magnitude > 1)
+        {
+            isoInput.Normalize();
+        }
+
         smoothedMovementInput = Vector2.SmoothDamp(
             smoothedMovementInput,
-            moveInput,
+            isoInput,
             ref movementInputSmoothVelocity,
             0.1f);
 
-        // 2. Obliczanie wektora ruchu
-        // W izometrii czasem trzeba przesunąć wektory, ale na start zrobimy prosto:
-        // W = Góra ekranu, S = Dół ekranu.
         Vector2 targetPosition = rb.position + smoothedMovementInput * moveSpeed * Time.fixedDeltaTime;
 
-        // 3. Przesunięcie fizyczne
         rb.MovePosition(targetPosition);
     }
 }
