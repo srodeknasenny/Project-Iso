@@ -10,10 +10,12 @@ public class PlayerController : MonoBehaviour
     private Vector2 moveInput;
     private Vector2 smoothedMovementInput;
     private Vector2 movementInputSmoothVelocity;
+    private Animator animator;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
     }
 
     public void OnMove(InputValue value)
@@ -46,5 +48,14 @@ public class PlayerController : MonoBehaviour
         Vector2 targetPosition = rb.position + smoothedMovementInput * moveSpeed * Time.fixedDeltaTime;
 
         rb.MovePosition(targetPosition);
+
+        bool isMoving = moveInput != Vector2.zero;
+        animator.SetBool("IsMoving", isMoving);
+
+        if (isMoving)
+        {
+            animator.SetFloat("InputX", moveInput.x);
+            animator.SetFloat("InputY", moveInput.y);
+        }
     }
 }
