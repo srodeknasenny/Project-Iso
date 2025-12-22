@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1322c9e2a8e0bf4a96bc27dcb2cbd23, type: 3}
+  m_Name: Meadow
+  m_EditorClassIdentifier: Assembly-CSharp::BiomeData
+  biomeName: Meadow
+  groundTile: {fileID: 11400000, guid: 86a40099b8fe1c1409893c3feb1d782e, type: 2}
+  treeFolderPath: Assets/_Game/Art/TilePalettes/Biomes/Meadow/LargeProps
+  treeTiles:
+  - {fileID: 11400000, guid: 272f79f8f6ccb894a8521bfe51133c29, type: 2}
+  - {fileID: 11400000, guid: 48308b18352159a42afe21cdd39f745e, type: 2}
+  propsFolderPath: Assets/_Game/Art/TilePalettes/Biomes/Meadow/SmallProps
+  propTiles:
+  - {fileID: 11400000, guid: a0c5de839f404bb46bea86aadeaa1cc6, type: 2}
+  - {fileID: 11400000, guid: a3717b810a6b617468febca72596e91b, type: 2}
+  - {fileID: 11400000, guid: 1d3ea41097d23864aa27e9f331657980, type: 2}
+  - {fileID: 11400000, guid: dbd625baef4762344b01a24d0c824def, type: 2}
+  - {fileID: 11400000, guid: 31888cf21b94f514ebbe4771beaf2f8f, type: 2}
+  - {fileID: 11400000, guid: 1bcb417cf850ed54b9fef0d5379fde74, type: 2}
+  - {fileID: 11400000, guid: 0d714de62c5617245bc2a4ca28ad9875, type: 2}
+  - {fileID: 11400000, guid: 07e0fcfbb59671047bf8488b8d4e530e, type: 2}
+  minHeight: 1

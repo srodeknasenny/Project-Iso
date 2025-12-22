@@ -312,7 +312,7 @@ GameObject:
   - component: {fileID: 4702779803102183764}
   - component: {fileID: 9083664472512442731}
   m_Layer: 0
-  m_Name: starter
+  m_Name: Tileset
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
