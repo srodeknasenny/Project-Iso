@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Tilemaps;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -8,33 +9,34 @@ public class BiomeData : ScriptableObject
 {
     public string biomeName;
     
-    [Header("Terrain Tile")]
-    public UnityEngine.Tilemaps.TileBase groundTile;
+    [Header("Terrain")]
+    public TileBase groundTile;
     
-    [Header("Path to LargeProps (eg. Assets/Tiles/Forest/LargeProps)")]
-    public string treeFolderPath; 
-    public UnityEngine.Tilemaps.TileBase[] treeTiles;
+    [Header("OBSTACLES (Collision)")]
+    public string obstaclePath; 
+    public TileBase[] obstacleTiles;
 
-    [Header("Path to SmallProps (eg. Assets/Tiles/Forest/SmallProps)")]
-    public string propsFolderPath;
-    public UnityEngine.Tilemaps.TileBase[] propTiles;
+    [Header("DECORATIONS (No collision)")]
+    public string decorationPath; 
+    public TileBase[] decorationTiles;
 
     [Range(0, 1)] public float minHeight;
+
 
 #if UNITY_EDITOR
     [ContextMenu("Auto Load Tiles From Folders")]
     public void LoadTiles()
     {
-        if (!string.IsNullOrEmpty(treeFolderPath))
+        if (!string.IsNullOrEmpty(obstaclePath))
         {
-            treeTiles = LoadTilesAtPath(treeFolderPath);
-            Debug.Log($"Loaded {treeTiles.Length} to {biomeName}");
+            obstacleTiles = LoadTilesAtPath(obstaclePath);
+            Debug.Log($"Loaded {obstacleTiles.Length} obstacles to {biomeName}");
         }
 
-        if (!string.IsNullOrEmpty(propsFolderPath))
+        if (!string.IsNullOrEmpty(decorationPath))
         {
-            propTiles = LoadTilesAtPath(propsFolderPath);
-            Debug.Log($"Loaded {propTiles.Length} to {biomeName}");
+            decorationTiles = LoadTilesAtPath(decorationPath);
+            Debug.Log($"Loaded {decorationTiles.Length} decorations to {biomeName}");
         }
         
         EditorUtility.SetDirty(this);
@@ -42,6 +44,14 @@ public class BiomeData : ScriptableObject
 
     private UnityEngine.Tilemaps.TileBase[] LoadTilesAtPath(string path)
     {
+        if (path.EndsWith("/")) path = path.Substring(0, path.Length - 1);
+
+        if (!AssetDatabase.IsValidFolder(path))
+        {
+            Debug.LogError($"ERROR: Path problems on: '{path}'");
+            return new UnityEngine.Tilemaps.TileBase[0];
+        }
+
         string[] guids = AssetDatabase.FindAssets("t:TileBase", new[] { path });
         
         UnityEngine.Tilemaps.TileBase[] loadedTiles = new UnityEngine.Tilemaps.TileBase[guids.Length];

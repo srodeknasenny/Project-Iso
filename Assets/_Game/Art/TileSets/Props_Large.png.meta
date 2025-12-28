@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 532ebacc3d8af8240afc73ad72c64ddf
+guid: 4c95e1ff37514884c998f517b0e1e573
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -97,11 +97,11 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Props_Large_0
+      name: Props_Large_16
       rect:
         serializedVersion: 2
         x: 0
-        y: 448
+        y: 384
         width: 32
         height: 64
       alignment: 7
@@ -112,18 +112,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e267503314b183444a274a8309236511
-      internalID: 959923411
+      spriteID: 3895c932165d4454cb88bd76ed5b3aac
+      internalID: 54349609
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Props_Large_1
+      name: Props_Large_32
       rect:
         serializedVersion: 2
-        x: 32
-        y: 448
+        x: 0
+        y: 320
         width: 32
         height: 64
       alignment: 7
@@ -134,8 +134,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 858406dc2994a26488ff652e07700691
-      internalID: -1304833262
+      spriteID: 680dc2c4ebd65f44f82be73d10291c04
+      internalID: -1044103410
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Props_Large_33
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 320
+        width: 32
+        height: 64
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c6ecaf2473243344bbc61cc3a17a011
+      internalID: 1514981420
       vertices: []
       indices: 
       edges: []
@@ -144,7 +166,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: f5460e71f048560489efd119419ed4eb
+    spriteID: 34256c94545fa0244800d641aea9853f
     internalID: 0
     vertices: []
     indices: 
@@ -156,8 +178,134 @@ TextureImporter:
       - key: SpriteEditor.SliceSettings
         value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":32.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":7,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      Props_Large_0: 959923411
-      Props_Large_1: -1304833262
+      Props_Large_0: 1840997333
+      Props_Large_1: 22331812
+      Props_Large_10: 1045121732
+      Props_Large_100: 1404999707
+      Props_Large_101: -1883256813
+      Props_Large_102: -1007735547
+      Props_Large_103: 856462256
+      Props_Large_104: 527018877
+      Props_Large_105: -966553291
+      Props_Large_106: 1883800797
+      Props_Large_107: 1872564211
+      Props_Large_108: 906687750
+      Props_Large_109: 486866220
+      Props_Large_11: 718959611
+      Props_Large_110: 1485314998
+      Props_Large_111: 695910975
+      Props_Large_112: -1081058400
+      Props_Large_113: -651225561
+      Props_Large_114: 1713094957
+      Props_Large_115: -294719279
+      Props_Large_116: -1635649212
+      Props_Large_117: 1890992018
+      Props_Large_118: -1889264818
+      Props_Large_119: 982495149
+      Props_Large_12: -190058201
+      Props_Large_120: 1190172663
+      Props_Large_121: -741000477
+      Props_Large_122: -453100883
+      Props_Large_123: 970947830
+      Props_Large_124: -214272808
+      Props_Large_125: 644846619
+      Props_Large_126: 190171243
+      Props_Large_127: -831967020
+      Props_Large_13: 223533037
+      Props_Large_14: -1035820680
+      Props_Large_15: -313447591
+      Props_Large_16: 54349609
+      Props_Large_17: 1067105143
+      Props_Large_18: 1064912410
+      Props_Large_19: 1707545494
+      Props_Large_2: 1698410926
+      Props_Large_20: -1737743209
+      Props_Large_21: -1317208572
+      Props_Large_22: 1038225123
+      Props_Large_23: -787579394
+      Props_Large_24: -458151493
+      Props_Large_25: 1784986151
+      Props_Large_26: -881047736
+      Props_Large_27: 1711516549
+      Props_Large_28: -1886099831
+      Props_Large_29: -1694823390
+      Props_Large_3: 1489185644
+      Props_Large_30: 75796869
+      Props_Large_31: -1409386540
+      Props_Large_32: -1044103410
+      Props_Large_33: 1514981420
+      Props_Large_34: 1469677804
+      Props_Large_35: 113431370
+      Props_Large_36: -215362849
+      Props_Large_37: 1455443217
+      Props_Large_38: 1718130587
+      Props_Large_39: -2067535149
+      Props_Large_4: 533539296
+      Props_Large_40: -270368345
+      Props_Large_41: 671257485
+      Props_Large_42: -2131709254
+      Props_Large_43: -523115989
+      Props_Large_44: 1844392552
+      Props_Large_45: 1432871373
+      Props_Large_46: -1375863363
+      Props_Large_47: -1918645178
+      Props_Large_48: 1042799894
+      Props_Large_49: 1037302959
+      Props_Large_5: 881125437
+      Props_Large_50: -312808230
+      Props_Large_51: -1559198015
+      Props_Large_52: -1656811108
+      Props_Large_53: 417482238
+      Props_Large_54: -1587220167
+      Props_Large_55: -173017448
+      Props_Large_56: -49525811
+      Props_Large_57: -203584742
+      Props_Large_58: -233532132
+      Props_Large_59: -945545222
+      Props_Large_6: -18349132
+      Props_Large_60: -2139874527
+      Props_Large_61: 205759507
+      Props_Large_62: -217433075
+      Props_Large_63: -1646124308
+      Props_Large_64: 2060343106
+      Props_Large_65: -400370315
+      Props_Large_66: -652131775
+      Props_Large_67: 1679461194
+      Props_Large_68: 1469352300
+      Props_Large_69: 1971847748
+      Props_Large_7: -1381921461
+      Props_Large_70: 1786864442
+      Props_Large_71: 739123382
+      Props_Large_72: 2007843607
+      Props_Large_73: 226744948
+      Props_Large_74: -480391827
+      Props_Large_75: 981233905
+      Props_Large_76: 1624401427
+      Props_Large_77: -160338581
+      Props_Large_78: -2063471470
+      Props_Large_79: -1713202239
+      Props_Large_8: 1209550028
+      Props_Large_80: 116383269
+      Props_Large_81: -465729589
+      Props_Large_82: 270442221
+      Props_Large_83: -1359600232
+      Props_Large_84: 1547960874
+      Props_Large_85: -1599589614
+      Props_Large_86: 1777367192
+      Props_Large_87: 397812919
+      Props_Large_88: 742306801
+      Props_Large_89: -347642160
+      Props_Large_9: -1865388917
+      Props_Large_90: -552658431
+      Props_Large_91: 229900941
+      Props_Large_92: -1338147647
+      Props_Large_93: -782724369
+      Props_Large_94: -1490521035
+      Props_Large_95: -1202647977
+      Props_Large_96: -1931339
+      Props_Large_97: -1383721996
+      Props_Large_98: -1795131725
+      Props_Large_99: -1194699139
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

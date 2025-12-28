@@ -13,19 +13,19 @@ MonoBehaviour:
   m_Name: Meadow
   m_EditorClassIdentifier: Assembly-CSharp::BiomeData
   biomeName: Meadow
-  groundTile: {fileID: 11400000, guid: 86a40099b8fe1c1409893c3feb1d782e, type: 2}
-  treeFolderPath: Assets/_Game/Art/TilePalettes/Biomes/Meadow/LargeProps
-  treeTiles:
-  - {fileID: 11400000, guid: 272f79f8f6ccb894a8521bfe51133c29, type: 2}
-  - {fileID: 11400000, guid: 48308b18352159a42afe21cdd39f745e, type: 2}
-  propsFolderPath: Assets/_Game/Art/TilePalettes/Biomes/Meadow/SmallProps
-  propTiles:
-  - {fileID: 11400000, guid: a0c5de839f404bb46bea86aadeaa1cc6, type: 2}
-  - {fileID: 11400000, guid: a3717b810a6b617468febca72596e91b, type: 2}
-  - {fileID: 11400000, guid: 1d3ea41097d23864aa27e9f331657980, type: 2}
-  - {fileID: 11400000, guid: dbd625baef4762344b01a24d0c824def, type: 2}
-  - {fileID: 11400000, guid: 31888cf21b94f514ebbe4771beaf2f8f, type: 2}
-  - {fileID: 11400000, guid: 1bcb417cf850ed54b9fef0d5379fde74, type: 2}
-  - {fileID: 11400000, guid: 0d714de62c5617245bc2a4ca28ad9875, type: 2}
-  - {fileID: 11400000, guid: 07e0fcfbb59671047bf8488b8d4e530e, type: 2}
-  minHeight: 1
+  groundTile: {fileID: 11400000, guid: d0d0ba3ed31699d4593a0ad7c30e6678, type: 2}
+  obstaclePath: Assets/_Game/Art/TilePalettes/Biomes/Meadow/Obstacles
+  obstacleTiles:
+  - {fileID: 11400000, guid: a5896323e03cf3a4094ac92b291951bf, type: 2}
+  - {fileID: 11400000, guid: 74b940b06c1c7b94287aec3a2fa8a443, type: 2}
+  - {fileID: 11400000, guid: 84650c118d8a1c144ac547218e64b3e7, type: 2}
+  - {fileID: 11400000, guid: ce4ecd3a51279fc49b0e09ce4bc67761, type: 2}
+  decorationPath: Assets/_Game/Art/TilePalettes/Biomes/Meadow/Decorations
+  decorationTiles:
+  - {fileID: 11400000, guid: bf96ddf815db64f4b8a8e153796604a2, type: 2}
+  - {fileID: 11400000, guid: 3ae37b5143a32b44fbeab03925bcc81b, type: 2}
+  - {fileID: 11400000, guid: 1192cd3c4d96f414d83342f74db650d3, type: 2}
+  - {fileID: 11400000, guid: ea08864e3de9d5842a4954996e6605f6, type: 2}
+  - {fileID: 11400000, guid: 4ca4dde43fa76264589e6e87f6201f26, type: 2}
+  - {fileID: 11400000, guid: 2924014e17be1a148b6904b6edd4c49e, type: 2}
+  minHeight: 0.7

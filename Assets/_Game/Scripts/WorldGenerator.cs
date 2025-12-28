@@ -11,7 +11,8 @@ public class WorldGenerator : MonoBehaviour
 
     [Header("References")]
     public Tilemap groundMap;
-    public Tilemap objectMap;
+    public Tilemap obstacleMap;
+    public Tilemap decorationMap;
 
     [Header("Data")]
     public BiomeData[] biomes; 
@@ -24,7 +25,9 @@ public class WorldGenerator : MonoBehaviour
     public void GenerateMap()
     {
         groundMap.ClearAllTiles();
-        objectMap.ClearAllTiles();
+        obstacleMap.ClearAllTiles();
+        decorationMap.ClearAllTiles();
+
         if (seed == 0) seed = Random.Range(0, 100000);
 
         for (int x = 0; x < width; x++)
@@ -48,28 +51,23 @@ public class WorldGenerator : MonoBehaviour
 
         float chance = Random.value; 
 
-        if (chance < 0.05f) 
+        bool placedObstacle = false;
+        
+        if (chance < 0.05f && biome.obstacleTiles != null && biome.obstacleTiles.Length > 0)
         {
-            if (biome.treeTiles != null && biome.treeTiles.Length > 0)
-            {
-                TileBase treeToPlace = biome.treeTiles[Random.Range(0, biome.treeTiles.Length)];
-                objectMap.SetTile(pos, treeToPlace);
-                
-                return;
-            }
+            var tile = biome.obstacleTiles[Random.Range(0, biome.obstacleTiles.Length)];
+            obstacleMap.SetTile(pos, tile);
+            placedObstacle = true;
+            return; 
         }
 
-        else if (chance < 0.15f) 
+        float decorationChance = Random.value; 
+
+        if (!placedObstacle && decorationChance < 0.2f && biome.decorationTiles != null && biome.decorationTiles.Length > 0)
         {
-            if (biome.propTiles != null && biome.propTiles.Length > 0)
-            {
-                TileBase propToPlace = biome.propTiles[Random.Range(0, biome.propTiles.Length)];
-                objectMap.SetTile(pos, propToPlace);
-                
-                return;
-            }
+            var tile = biome.decorationTiles[Random.Range(0, biome.decorationTiles.Length)];
+            decorationMap.SetTile(pos, tile);
         }
-        
     }
 
     BiomeData ChooseBiome(float value)
