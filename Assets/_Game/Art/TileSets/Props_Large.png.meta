@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Props_Large_16
+      name: Props_Large_0
       rect:
         serializedVersion: 2
         x: 0
@@ -112,14 +112,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3895c932165d4454cb88bd76ed5b3aac
-      internalID: 54349609
+      spriteID: 4eed012d05130dc4aa6ac3fd23b98703
+      internalID: 1840997333
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Props_Large_32
+      name: Props_Large_1
       rect:
         serializedVersion: 2
         x: 0
@@ -134,14 +134,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 680dc2c4ebd65f44f82be73d10291c04
-      internalID: -1044103410
+      spriteID: 209906d58752c9d4b9c903b743c65e12
+      internalID: 22331812
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Props_Large_33
+      name: Props_Large_2
       rect:
         serializedVersion: 2
         x: 32
@@ -156,8 +156,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3c6ecaf2473243344bbc61cc3a17a011
-      internalID: 1514981420
+      spriteID: 259969a785b12eb47919c0780aaf2e59
+      internalID: 1698410926
       vertices: []
       indices: 
       edges: []

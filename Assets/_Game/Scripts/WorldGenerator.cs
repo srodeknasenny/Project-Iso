@@ -50,13 +50,14 @@ public class WorldGenerator : MonoBehaviour
         }
 
         float chance = Random.value; 
-
         bool placedObstacle = false;
         
         if (chance < 0.05f && biome.obstacleTiles != null && biome.obstacleTiles.Length > 0)
         {
             var tile = biome.obstacleTiles[Random.Range(0, biome.obstacleTiles.Length)];
+            
             obstacleMap.SetTile(pos, tile);
+            
             placedObstacle = true;
             return; 
         }
@@ -66,6 +67,7 @@ public class WorldGenerator : MonoBehaviour
         if (!placedObstacle && decorationChance < 0.2f && biome.decorationTiles != null && biome.decorationTiles.Length > 0)
         {
             var tile = biome.decorationTiles[Random.Range(0, biome.decorationTiles.Length)];
+            
             decorationMap.SetTile(pos, tile);
         }
     }

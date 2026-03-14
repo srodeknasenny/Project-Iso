@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Tilemaps;
-using UnityEditor.U2D.Sprites; // WAŻNE: Nowy namespace do obsługi Slicingu
+using UnityEditor.U2D.Sprites; 
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
 public class ProjectPipeline : AssetPostprocessor
 {
+    const string TILES_ROOT_PATH = "Assets/_Game/Art/TilePalettes/Biomes";
 
     void DistributeTerrain(Sprite[] sprites)
     {
@@ -18,7 +19,7 @@ public class ProjectPipeline : AssetPostprocessor
 
     void DistributePropsSmall(Sprite[] sprites)
     {
-        AssignRange(sprites, 0, 2, "Meadow", "Ocean", isObstacle: false);
+        AssignRange(sprites, 0, 2, "Ocean", "Ocean", isObstacle: false);
         AssignRange(sprites, 3, 6, "Beach", "Beach", isObstacle: false);
         AssignRange(sprites, 7, 12, "Meadow", "Meadow", isObstacle: false);
         AssignRange(sprites, 13, 14, "Meadow", "Meadow", isObstacle: true);
@@ -28,6 +29,23 @@ public class ProjectPipeline : AssetPostprocessor
     {
         AssignRange(sprites, 0, 0, "Beach", "Beach", isObstacle: true);
         AssignRange(sprites, 1, 2, "Meadow", "Meadow", isObstacle: true);
+    }
+
+    static void CleanUpOldAssets(string fileName)
+    {
+        if (!Directory.Exists(TILES_ROOT_PATH)) return;
+
+        string[] foundFiles = Directory.GetFiles(TILES_ROOT_PATH, $"{fileName}_*.asset", SearchOption.AllDirectories);
+
+        foreach (string filePath in foundFiles)
+        {
+            string relativePath = filePath.Replace("\\", "/");
+            
+            if (relativePath.EndsWith(".asset"))
+            {
+                AssetDatabase.DeleteAsset(relativePath);
+            }
+        }
     }
 
     void OnPreprocessTexture()
@@ -77,17 +95,35 @@ public class ProjectPipeline : AssetPostprocessor
             
             if (fileName == "Terrain" || fileName == "Props_Small" || fileName == "Props_Large")
             {
+                CleanUpOldAssets(fileName);
+
                 var script = new ProjectPipeline();
                 Object[] assets = AssetDatabase.LoadAllAssetsAtPath(path);
-                Sprite[] sprites = assets.OfType<Sprite>().OrderBy(s => s.name).ToArray();
+
+                Sprite[] sprites = assets
+                    .OfType<Sprite>()
+                    .OrderBy(s => GetSortIndex(s.name))
+                    .ToArray();
 
                 if (fileName == "Terrain") script.DistributeTerrain(sprites);
                 else if (fileName == "Props_Small") script.DistributePropsSmall(sprites);
                 else if (fileName == "Props_Large") script.DistributePropsLarge(sprites);
                 
-                Debug.Log($"✅ <color=green>Pipeline:</color> Przetworzono i rozdano kafelki z {fileName}!");
+                Debug.Log($"✅ <color=green>Pipeline:</color> Wyczyszczono, przetworzono i rozdano nowe kafelki z {fileName}!");
             }
         }
+    }
+
+    static int GetSortIndex(string spriteName)
+    {
+        string[] parts = spriteName.Split('_');
+        
+        if (parts.Length > 0 && int.TryParse(parts[parts.Length - 1], out int index))
+        {
+            return index;
+        }
+        
+        return 0;
     }
 
     void AssignGround(Sprite[] sprites, int index, string biomeName, string assetNameSearch)
@@ -124,6 +160,8 @@ public class ProjectPipeline : AssetPostprocessor
         if (isObstacle && biome.obstacleTiles != null) currentList.AddRange(biome.obstacleTiles);
         else if (!isObstacle && biome.decorationTiles != null) currentList.AddRange(biome.decorationTiles);
 
+        currentList.RemoveAll(item => item == null);
+
         foreach (var t in tilesList)
         {
             if (!currentList.Contains(t)) currentList.Add(t);
@@ -137,10 +175,11 @@ public class ProjectPipeline : AssetPostprocessor
 
     Tile GetOrCreateTile(Sprite sprite, string folderName, string subfolder)
     {
-        string folderPath = $"Assets/Tiles/{folderName}/{subfolder}";
+        string folderPath = $"{TILES_ROOT_PATH}/{folderName}/{subfolder}";
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
         string tilePath = $"{folderPath}/{sprite.name}.asset";
+        
         Tile tile = AssetDatabase.LoadAssetAtPath<Tile>(tilePath);
 
         if (tile == null)
@@ -168,6 +207,7 @@ public class ProjectPipeline : AssetPostprocessor
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
         return AssetDatabase.LoadAssetAtPath<BiomeData>(path);
     }
+
     void SliceTextureAutomatically(TextureImporter importer, int w, int h, SpriteAlignment align)
     {
         Texture2D texture = LoadTextureRaw(importer.assetPath);
@@ -184,6 +224,8 @@ public class ProjectPipeline : AssetPostprocessor
         var spriteRects = new List<SpriteRect>();
         int cols = width / w;
         int rows = height / h;
+        
+        int visualIndex = 0; 
 
         for (int y = 0; y < rows; y++)
         {
@@ -195,17 +237,16 @@ public class ProjectPipeline : AssetPostprocessor
                 {
                     continue;
                 }
-
                 var spriteRect = new SpriteRect();
                 spriteRect.rect = rect;
                 spriteRect.alignment = align;
                 spriteRect.pivot = GetPivotValue(align);
-
-                int visualIndex = y * cols + x;
+                
                 spriteRect.name = $"{Path.GetFileNameWithoutExtension(importer.assetPath)}_{visualIndex}";
                 spriteRect.spriteID = GUID.Generate();
                 
                 spriteRects.Add(spriteRect);
+                visualIndex++;
             }
         }
 
@@ -220,20 +261,13 @@ public class ProjectPipeline : AssetPostprocessor
         try
         {
             Color[] pixels = tex.GetPixels((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height);
-
             foreach (Color p in pixels)
             {
-                if (p.a > 0.01f)
-                {
-                    return false;
-                }
+                if (p.a > 0.01f) return false;
             }
             return true;
         }
-        catch
-        {
-            return false;
-        }
+        catch { return false; }
     }
 
     Texture2D LoadTextureRaw(string path)

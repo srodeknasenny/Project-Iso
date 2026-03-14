@@ -13,12 +13,11 @@ MonoBehaviour:
   m_Name: Ocean
   m_EditorClassIdentifier: Assembly-CSharp::BiomeData
   biomeName: Ocean
-  groundTile: {fileID: 11400000, guid: a8f844b43a3143b49ad5791a45b2c038, type: 2}
-  obstaclePath: Assets/_Game/Art/TilePalettes/Biomes/Ocean/Obstacles
+  groundTile: {fileID: 11400000, guid: 3a3ff529030b5324b802e6fb9c636a4a, type: 2}
   obstacleTiles: []
-  decorationPath: Assets/_Game/Art/TilePalettes/Biomes/Ocean/Decorations
   decorationTiles:
   - {fileID: 11400000, guid: 722e3613ab2e29442ba3adb6ad1688ef, type: 2}
   - {fileID: 11400000, guid: b9f51a5a910436840a7f02379c9dc221, type: 2}
   - {fileID: 11400000, guid: 966c502f077d2da46bc77db42f0f5a9d, type: 2}
+  propsVerticalOffset: -0.25
   minHeight: 0.2
