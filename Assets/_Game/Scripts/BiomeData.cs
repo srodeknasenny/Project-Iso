@@ -16,7 +16,10 @@ public class BiomeData : ScriptableObject
     public TileBase[] obstacleTiles;
 
     [Header("DECORATIONS (No collision)")]
+    
     public TileBase[] decorationTiles;
+    [Header("ELEVATION LEVEL")]
+    public int elevationLevel;
 
     [Range(0, 1)] public float minHeight;
 }

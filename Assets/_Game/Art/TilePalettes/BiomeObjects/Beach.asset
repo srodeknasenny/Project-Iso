@@ -21,5 +21,5 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f6e9c54e0cda11d479b717103cd7b1ce, type: 2}
   - {fileID: 11400000, guid: f08c7405c12223d4c91568e3731cf952, type: 2}
   - {fileID: 11400000, guid: 2b76e14d1d7a6684e89f3479be937957, type: 2}
-  propsVerticalOffset: 0
+  elevationLevel: 1
   minHeight: 0.5

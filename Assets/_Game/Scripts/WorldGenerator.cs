@@ -10,9 +10,9 @@ public class WorldGenerator : MonoBehaviour
     public int seed = 12345;
 
     [Header("References")]
-    public Tilemap groundMap;
-    public Tilemap obstacleMap;
-    public Tilemap decorationMap;
+    public Tilemap[] groundMap;
+    public Tilemap[] obstacleMap;
+    public Tilemap[] decorationMap;
 
     [Header("Data")]
     public BiomeData[] biomes; 
@@ -24,9 +24,18 @@ public class WorldGenerator : MonoBehaviour
 
     public void GenerateMap()
     {
-        groundMap.ClearAllTiles();
-        obstacleMap.ClearAllTiles();
-        decorationMap.ClearAllTiles();
+        foreach(Tilemap groundLayer in groundMap)
+        {
+            groundLayer.ClearAllTiles();
+        }
+        foreach(Tilemap obstacleLayer in obstacleMap)
+        {
+            obstacleLayer.ClearAllTiles();   
+        }
+        foreach(Tilemap decorationLayer in decorationMap)
+        {
+            decorationLayer.ClearAllTiles();   
+        }
 
         if (seed == 0) seed = Random.Range(0, 100000);
 
@@ -44,10 +53,13 @@ public class WorldGenerator : MonoBehaviour
 
         Vector3Int pos = new Vector3Int(x, y, 0);
 
-        if (biome.groundTile != null)
+        int elevationLevel = biome.elevationLevel;
+
+        for(int i=0; i<elevationLevel; i++)
         {
-            groundMap.SetTile(pos, biome.groundTile);
+            groundMap[i].SetTile(pos, biome.groundTile); // change when ill have a dirt
         }
+        groundMap[elevationLevel].SetTile(pos, biome.groundTile);
 
         float chance = Random.value; 
         bool placedObstacle = false;
@@ -56,7 +68,7 @@ public class WorldGenerator : MonoBehaviour
         {
             var tile = biome.obstacleTiles[Random.Range(0, biome.obstacleTiles.Length)];
             
-            obstacleMap.SetTile(pos, tile);
+            obstacleMap[elevationLevel].SetTile(pos, tile);
             
             placedObstacle = true;
             return; 
@@ -68,7 +80,7 @@ public class WorldGenerator : MonoBehaviour
         {
             var tile = biome.decorationTiles[Random.Range(0, biome.decorationTiles.Length)];
             
-            decorationMap.SetTile(pos, tile);
+            decorationMap[elevationLevel].SetTile(pos, tile);
         }
     }
 
