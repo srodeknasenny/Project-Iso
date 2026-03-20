@@ -13,18 +13,19 @@ MonoBehaviour:
   m_Name: Meadow
   m_EditorClassIdentifier: Assembly-CSharp::BiomeData
   biomeName: Meadow
-  groundTile: {fileID: 11400000, guid: 1e3b9ca670e9fd24c95e67464bd7191a, type: 2}
-  obstacleTiles:
-  - {fileID: 11400000, guid: a5896323e03cf3a4094ac92b291951bf, type: 2}
-  - {fileID: 11400000, guid: 74b940b06c1c7b94287aec3a2fa8a443, type: 2}
-  - {fileID: 11400000, guid: 84650c118d8a1c144ac547218e64b3e7, type: 2}
-  - {fileID: 11400000, guid: ce4ecd3a51279fc49b0e09ce4bc67761, type: 2}
-  decorationTiles:
-  - {fileID: 11400000, guid: bf96ddf815db64f4b8a8e153796604a2, type: 2}
-  - {fileID: 11400000, guid: 3ae37b5143a32b44fbeab03925bcc81b, type: 2}
-  - {fileID: 11400000, guid: 1192cd3c4d96f414d83342f74db650d3, type: 2}
-  - {fileID: 11400000, guid: ea08864e3de9d5842a4954996e6605f6, type: 2}
-  - {fileID: 11400000, guid: 4ca4dde43fa76264589e6e87f6201f26, type: 2}
-  - {fileID: 11400000, guid: 2924014e17be1a148b6904b6edd4c49e, type: 2}
   elevationLevel: 2
+  topTile: {fileID: 11400000, guid: 6ac1c700b3e737a4a87b6925e92fa1fc, type: 2}
+  fillTile: {fileID: 0}
+  obstaclePrefabs:
+  - {fileID: 3058805777894525855, guid: da167ad7f036f9741bce586fb6a62083, type: 3}
+  - {fileID: 4935011782961849235, guid: 530017aba8301a944871db2c9c90d354, type: 3}
+  - {fileID: 7618236170711523313, guid: f45f19789739b7d42bc1569bc4d1654c, type: 3}
+  - {fileID: 6656823435456821849, guid: 19666643f0181b544a4b0363105d944b, type: 3}
+  decorationPrefabs:
+  - {fileID: 7235023803874861435, guid: a2e1e606a012dda488815b6635062d28, type: 3}
+  - {fileID: 6276861737233834622, guid: 8ba4baded6b6f254dbb4ed22f5711334, type: 3}
+  - {fileID: 3379299754648304073, guid: 844fbfec94ab108478ed8b25169bec4b, type: 3}
+  - {fileID: 1972221093289052684, guid: 914dd2fbab7711b4ea2c3ec4bac6e3bd, type: 3}
+  - {fileID: 6967957684111803798, guid: 479347b53e24da94aa3507f014a59eb7, type: 3}
+  - {fileID: 1916411889074393050, guid: 52d913205a77a754fb319ce420177240, type: 3}
   minHeight: 0.7

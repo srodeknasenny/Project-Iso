@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: Beach
   m_EditorClassIdentifier: Assembly-CSharp::BiomeData
   biomeName: Beach
-  groundTile: {fileID: 11400000, guid: 6f540f5d8bd696647a12033a8f512e5a, type: 2}
-  obstacleTiles:
-  - {fileID: 11400000, guid: af0b7b0cbab452f47819f22bf1737159, type: 2}
-  decorationTiles:
-  - {fileID: 11400000, guid: d5e859d01280bb7498109b60f010968e, type: 2}
-  - {fileID: 11400000, guid: f6e9c54e0cda11d479b717103cd7b1ce, type: 2}
-  - {fileID: 11400000, guid: f08c7405c12223d4c91568e3731cf952, type: 2}
-  - {fileID: 11400000, guid: 2b76e14d1d7a6684e89f3479be937957, type: 2}
   elevationLevel: 1
+  topTile: {fileID: 11400000, guid: 7cc66c8d05a02e344ae534eeadea46b1, type: 2}
+  fillTile: {fileID: 0}
+  obstaclePrefabs:
+  - {fileID: 1061197685954556030, guid: 744358247a8411c4d83bb3974296886d, type: 3}
+  decorationPrefabs:
+  - {fileID: 7621309711629566190, guid: 9dde1adf78d312a4ba7f220f9d181f77, type: 3}
+  - {fileID: 1897005912396175218, guid: ebb92c36b565863469d24e25dd8ca71f, type: 3}
+  - {fileID: 190223045940224954, guid: 980b6da3e53cd4a4c81e07005eed60d0, type: 3}
+  - {fileID: 4199870515749343175, guid: 7522818c3ca230e4e9304b85f8fb822c, type: 3}
   minHeight: 0.5

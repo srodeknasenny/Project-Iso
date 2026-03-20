@@ -1,25 +1,21 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 [CreateAssetMenu(fileName = "NewBiome", menuName = "World/Biome Data")]
 public class BiomeData : ScriptableObject
 {
     public string biomeName;
-    
+    public int elevationLevel; 
+
     [Header("Terrain")]
-    public TileBase groundTile;
+    public TileBase topTile;  
+    public TileBase fillTile; 
     
-    [Header("OBSTACLES (Collision)")]
-    public TileBase[] obstacleTiles;
+    [Header("OBSTACLES (Prefaby)")]
+    public GameObject[] obstaclePrefabs; 
 
-    [Header("DECORATIONS (No collision)")]
-    
-    public TileBase[] decorationTiles;
-    [Header("ELEVATION LEVEL")]
-    public int elevationLevel;
+    [Header("DECORATIONS (Prefaby)")]
+    public GameObject[] decorationPrefabs; 
 
-    [Range(0, 1)] public float minHeight;
+    [Range(0, 1)] public float minHeight; 
 }

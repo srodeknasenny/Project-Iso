@@ -1,86 +1,118 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 public class WorldGenerator : MonoBehaviour
 {
-    [Header("Settings")]
-    public int width = 50;
-    public int height = 50;
+    [Header("Chunk Settings")]
+    public int chunkSize = 16;
+    public int chunksX = 3;
+    public int chunksY = 3;
+    public TerrainChunk chunkPrefab; 
+    public Grid mainGrid;
+
+    [Header("World Settings")]
     public float scale = 0.1f;
     public int seed = 12345;
-
-    [Header("References")]
-    public Tilemap[] groundMap;
-    public Tilemap[] obstacleMap;
-    public Tilemap[] decorationMap;
 
     [Header("Data")]
     public BiomeData[] biomes; 
 
+    private List<TerrainChunk> spawnedChunks = new List<TerrainChunk>();
+
     void Start()
     {
-        GenerateMap();
+        if (mainGrid == null) mainGrid = GetComponent<Grid>();
+        GenerateWorld();
     }
 
-    public void GenerateMap()
+    public void GenerateWorld()
     {
-        foreach(Tilemap groundLayer in groundMap)
+        foreach(TerrainChunk chunk in spawnedChunks)
         {
-            groundLayer.ClearAllTiles();
+            if (chunk != null) Destroy(chunk.gameObject);
         }
-        foreach(Tilemap obstacleLayer in obstacleMap)
-        {
-            obstacleLayer.ClearAllTiles();   
-        }
-        foreach(Tilemap decorationLayer in decorationMap)
-        {
-            decorationLayer.ClearAllTiles();   
-        }
+        spawnedChunks.Clear();
 
         if (seed == 0) seed = Random.Range(0, 100000);
 
-        for (int x = 0; x < width; x++)
-            for (int y = 0; y < height; y++)
-                GenerateTile(x, y);
+        for (int cx = 0; cx < chunksX; cx++)
+        {
+            for (int cy = 0; cy < chunksY; cy++)
+            {
+                BuildChunk(cx, cy);
+            }
+        }
     }
 
-    void GenerateTile(int x, int y)
+    void BuildChunk(int chunkX, int chunkY)
     {
-        float noiseValue = Mathf.PerlinNoise((float)x * scale + seed, (float)y * scale + seed);
+        Vector3Int chunkBaseCoords = new Vector3Int(chunkX * chunkSize, chunkY * chunkSize, 0);
+        Vector3 chunkWorldPos = mainGrid.CellToWorld(chunkBaseCoords);
+
+        TerrainChunk chunk = Instantiate(chunkPrefab, chunkWorldPos, Quaternion.identity, transform);
+        chunk.name = $"Chunk_{chunkX}_{chunkY}";
+        spawnedChunks.Add(chunk);
+
+        Vector3Int maxCoords = new Vector3Int((chunkX + 1) * chunkSize, (chunkY + 1) * chunkSize, 0);
+        Vector3 maxWorldPos = mainGrid.CellToWorld(maxCoords);
+        
+
+        for (int lx = 0; lx < chunkSize; lx++)
+        {
+            for (int ly = 0; ly < chunkSize; ly++)
+            {
+                int globalX = (chunkX * chunkSize) + lx;
+                int globalY = (chunkY * chunkSize) + ly;
+
+                GenerateTileInChunk(chunk, lx, ly, globalX, globalY);
+            }
+        }
+    }
+
+    void GenerateTileInChunk(TerrainChunk chunk, int localX, int localY, int globalX, int globalY)
+    {
+        float noiseValue = Mathf.PerlinNoise((float)globalX * scale + seed, (float)globalY * scale + seed);
         BiomeData biome = ChooseBiome(noiseValue);
 
         if (biome == null) return;
 
-        Vector3Int pos = new Vector3Int(x, y, 0);
+        Vector3Int localPos = new Vector3Int(localX, localY, 0);
 
         int elevationLevel = biome.elevationLevel;
+        if (elevationLevel >= chunk.groundMaps.Length) elevationLevel = chunk.groundMaps.Length - 1;
 
-        for(int i=0; i<elevationLevel; i++)
+        for(int i = 0; i < elevationLevel; i++)
         {
-            groundMap[i].SetTile(pos, biome.groundTile); // change when ill have a dirt
+            chunk.groundMaps[i].SetTile(localPos, biome.fillTile); 
         }
-        groundMap[elevationLevel].SetTile(pos, biome.groundTile);
+        chunk.groundMaps[elevationLevel].SetTile(localPos, biome.topTile);
 
+        Vector3 worldPos = chunk.groundMaps[elevationLevel].GetCellCenterWorld(localPos);
         float chance = Random.value; 
         bool placedObstacle = false;
         
-        if (chance < 0.05f && biome.obstacleTiles != null && biome.obstacleTiles.Length > 0)
+        if (chance < 0.05f && biome.obstaclePrefabs != null && biome.obstaclePrefabs.Length > 0)
         {
-            var tile = biome.obstacleTiles[Random.Range(0, biome.obstacleTiles.Length)];
+            GameObject prefab = biome.obstaclePrefabs[Random.Range(0, biome.obstaclePrefabs.Length)];
             
-            obstacleMap[elevationLevel].SetTile(pos, tile);
+            GameObject newObj = Instantiate(prefab, worldPos, Quaternion.identity, chunk.obstacleParents[elevationLevel]);
+            
+            DepthSorter sorter = newObj.GetComponent<DepthSorter>();
+            if (sorter != null) sorter.elevationLevel = elevationLevel;
             
             placedObstacle = true;
             return; 
         }
 
         float decorationChance = Random.value; 
-
-        if (!placedObstacle && decorationChance < 0.2f && biome.decorationTiles != null && biome.decorationTiles.Length > 0)
+        if (!placedObstacle && decorationChance < 0.2f && biome.decorationPrefabs != null && biome.decorationPrefabs.Length > 0)
         {
-            var tile = biome.decorationTiles[Random.Range(0, biome.decorationTiles.Length)];
+            GameObject prefab = biome.decorationPrefabs[Random.Range(0, biome.decorationPrefabs.Length)];
+            GameObject newObj = Instantiate(prefab, worldPos, Quaternion.identity, chunk.decorationParents[elevationLevel]);
             
-            decorationMap[elevationLevel].SetTile(pos, tile);
+            DepthSorter sorter = newObj.GetComponent<DepthSorter>();
+            if (sorter != null) sorter.elevationLevel = elevationLevel;
         }
     }
 

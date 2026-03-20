@@ -13,11 +13,12 @@ MonoBehaviour:
   m_Name: Ocean
   m_EditorClassIdentifier: Assembly-CSharp::BiomeData
   biomeName: Ocean
-  groundTile: {fileID: 11400000, guid: 3a3ff529030b5324b802e6fb9c636a4a, type: 2}
-  obstacleTiles: []
-  decorationTiles:
-  - {fileID: 11400000, guid: 722e3613ab2e29442ba3adb6ad1688ef, type: 2}
-  - {fileID: 11400000, guid: b9f51a5a910436840a7f02379c9dc221, type: 2}
-  - {fileID: 11400000, guid: 966c502f077d2da46bc77db42f0f5a9d, type: 2}
   elevationLevel: 0
+  topTile: {fileID: 11400000, guid: 6c7dd61af71ed334691877ca066b5b6a, type: 2}
+  fillTile: {fileID: 0}
+  obstaclePrefabs: []
+  decorationPrefabs:
+  - {fileID: 1269848584140235902, guid: 21040f2d25a3ef74bb1b281b30b9dde1, type: 3}
+  - {fileID: 8393519452385447822, guid: 9fc417d13e2dd2045af76e1fb1b2686c, type: 3}
+  - {fileID: 5892836662382620540, guid: d427c385a33c52442903ec5a938d2c6b, type: 3}
   minHeight: 0.2

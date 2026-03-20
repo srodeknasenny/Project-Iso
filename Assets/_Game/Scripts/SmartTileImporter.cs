@@ -12,9 +12,10 @@ public class ProjectPipeline : AssetPostprocessor
 
     void DistributeTerrain(Sprite[] sprites)
     {
-        AssignGround(sprites, 0, "Ocean", "Ocean"); 
-        AssignGround(sprites, 1, "Beach", "Beach");
-        AssignGround(sprites, 2, "Meadow", "Meadow");
+        // Używamy topIndex oraz fillIndex do budowy klifów!
+        AssignGround(sprites, 0, 3, "Ocean", "Ocean"); 
+        AssignGround(sprites, 1, 4, "Beach", "Beach");
+        AssignGround(sprites, 2, 5, "Meadow", "Meadow");
     }
 
     void DistributePropsSmall(Sprite[] sprites)
@@ -35,16 +36,14 @@ public class ProjectPipeline : AssetPostprocessor
     {
         if (!Directory.Exists(TILES_ROOT_PATH)) return;
 
-        string[] foundFiles = Directory.GetFiles(TILES_ROOT_PATH, $"{fileName}_*.asset", SearchOption.AllDirectories);
+        // Skrypt usunie teraz stare kafelki (.asset) i wygeneruje na nowo prefaby (.prefab)
+        string[] foundAssets = Directory.GetFiles(TILES_ROOT_PATH, $"{fileName}_*.asset", SearchOption.AllDirectories);
+        string[] foundPrefabs = Directory.GetFiles(TILES_ROOT_PATH, $"{fileName}_*.prefab", SearchOption.AllDirectories);
 
-        foreach (string filePath in foundFiles)
+        foreach (string filePath in foundAssets.Concat(foundPrefabs))
         {
             string relativePath = filePath.Replace("\\", "/");
-            
-            if (relativePath.EndsWith(".asset"))
-            {
-                AssetDatabase.DeleteAsset(relativePath);
-            }
+            AssetDatabase.DeleteAsset(relativePath);
         }
     }
 
@@ -109,7 +108,7 @@ public class ProjectPipeline : AssetPostprocessor
                 else if (fileName == "Props_Small") script.DistributePropsSmall(sprites);
                 else if (fileName == "Props_Large") script.DistributePropsLarge(sprites);
                 
-                Debug.Log($"✅ <color=green>Pipeline:</color> Wyczyszczono, przetworzono i rozdano nowe kafelki z {fileName}!");
+                Debug.Log($"✅ <color=green>Pipeline:</color> Wyczyszczono, przetworzono i rozdano nowe pliki z {fileName}!");
             }
         }
     }
@@ -117,24 +116,25 @@ public class ProjectPipeline : AssetPostprocessor
     static int GetSortIndex(string spriteName)
     {
         string[] parts = spriteName.Split('_');
-        
-        if (parts.Length > 0 && int.TryParse(parts[parts.Length - 1], out int index))
-        {
-            return index;
-        }
-        
+        if (parts.Length > 0 && int.TryParse(parts[parts.Length - 1], out int index)) return index;
         return 0;
     }
 
-    void AssignGround(Sprite[] sprites, int index, string biomeName, string assetNameSearch)
+    void AssignGround(Sprite[] sprites, int topIndex, int fillIndex, string biomeName, string assetNameSearch)
     {
-        if (index >= sprites.Length) return;
-        
         BiomeData biome = FindBiomeData(assetNameSearch);
         if (biome != null)
         {
-            Tile tile = GetOrCreateTile(sprites[index], biomeName, "Ground");
-            biome.groundTile = tile;
+            if (topIndex < sprites.Length)
+            {
+                Tile tTile = GetOrCreateTile(sprites[topIndex], biomeName, "Ground_Top");
+                biome.topTile = tTile;
+            }
+            if (fillIndex < sprites.Length)
+            {
+                Tile fTile = GetOrCreateTile(sprites[fillIndex], biomeName, "Ground_Fill");
+                biome.fillTile = fTile;
+            }
             EditorUtility.SetDirty(biome);
         }
     }
@@ -144,31 +144,31 @@ public class ProjectPipeline : AssetPostprocessor
         BiomeData biome = FindBiomeData(assetNameSearch);
         if (biome == null) return;
 
-        List<TileBase> tilesList = new List<TileBase>();
+        List<GameObject> prefabList = new List<GameObject>();
         
         for (int i = startIdx; i <= endIdx; i++)
         {
             if (i < sprites.Length)
             {
                 string cat = isObstacle ? "Obstacles" : "Decorations";
-                Tile tile = GetOrCreateTile(sprites[i], biomeName, cat);
-                tilesList.Add(tile);
+                GameObject prefab = GetOrCreatePrefab(sprites[i], biomeName, cat);
+                prefabList.Add(prefab);
             }
         }
 
-        List<TileBase> currentList = new List<TileBase>();
-        if (isObstacle && biome.obstacleTiles != null) currentList.AddRange(biome.obstacleTiles);
-        else if (!isObstacle && biome.decorationTiles != null) currentList.AddRange(biome.decorationTiles);
+        List<GameObject> currentList = new List<GameObject>();
+        if (isObstacle && biome.obstaclePrefabs != null) currentList.AddRange(biome.obstaclePrefabs);
+        else if (!isObstacle && biome.decorationPrefabs != null) currentList.AddRange(biome.decorationPrefabs);
 
         currentList.RemoveAll(item => item == null);
 
-        foreach (var t in tilesList)
+        foreach (var p in prefabList)
         {
-            if (!currentList.Contains(t)) currentList.Add(t);
+            if (!currentList.Contains(p)) currentList.Add(p);
         }
 
-        if (isObstacle) biome.obstacleTiles = currentList.ToArray();
-        else biome.decorationTiles = currentList.ToArray();
+        if (isObstacle) biome.obstaclePrefabs = currentList.ToArray();
+        else biome.decorationPrefabs = currentList.ToArray();
 
         EditorUtility.SetDirty(biome);
     }
@@ -179,7 +179,6 @@ public class ProjectPipeline : AssetPostprocessor
         if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
 
         string tilePath = $"{folderPath}/{sprite.name}.asset";
-        
         Tile tile = AssetDatabase.LoadAssetAtPath<Tile>(tilePath);
 
         if (tile == null)
@@ -196,14 +195,43 @@ public class ProjectPipeline : AssetPostprocessor
         return tile;
     }
 
+    GameObject GetOrCreatePrefab(Sprite sprite, string folderName, string subfolder)
+    {
+        string folderPath = $"{TILES_ROOT_PATH}/{folderName}/{subfolder}";
+        if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+
+        string prefabPath = $"{folderPath}/{sprite.name}.prefab";
+        GameObject existingPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+
+        if (existingPrefab == null)
+        {
+            GameObject tempGo = new GameObject(sprite.name);
+            SpriteRenderer sr = tempGo.AddComponent<SpriteRenderer>();
+            sr.sprite = sprite;
+            sr.spriteSortPoint = SpriteSortPoint.Pivot;
+
+            DepthSorter sorter = tempGo.AddComponent<DepthSorter>();
+            sorter.isStatic = true; 
+
+            existingPrefab = PrefabUtility.SaveAsPrefabAsset(tempGo, prefabPath);
+            Object.DestroyImmediate(tempGo);
+        }
+        else
+        {
+            // Aktualizuje obrazek, jeśli podmienisz grafikę
+            GameObject tempGo = PrefabUtility.InstantiatePrefab(existingPrefab) as GameObject;
+            tempGo.GetComponent<SpriteRenderer>().sprite = sprite;
+            PrefabUtility.SaveAsPrefabAsset(tempGo, prefabPath);
+            Object.DestroyImmediate(tempGo);
+        }
+
+        return existingPrefab;
+    }
+
     BiomeData FindBiomeData(string searchName)
     {
         string[] guids = AssetDatabase.FindAssets($"t:BiomeData {searchName}");
-        if (guids.Length == 0) 
-        {
-            Debug.LogError($"❌ Nie znaleziono BiomData o nazwie: {searchName}");
-            return null;
-        }
+        if (guids.Length == 0) return null;
         string path = AssetDatabase.GUIDToAssetPath(guids[0]);
         return AssetDatabase.LoadAssetAtPath<BiomeData>(path);
     }
@@ -232,11 +260,8 @@ public class ProjectPipeline : AssetPostprocessor
             for (int x = 0; x < cols; x++)
             {
                 Rect rect = new Rect(x * w, height - (y + 1) * h, w, h);
-
-                if (IsTileEmpty(texture, rect))
-                {
-                    continue;
-                }
+                if (IsTileEmpty(texture, rect)) continue;
+                
                 var spriteRect = new SpriteRect();
                 spriteRect.rect = rect;
                 spriteRect.alignment = align;
@@ -251,7 +276,6 @@ public class ProjectPipeline : AssetPostprocessor
         }
 
         Object.DestroyImmediate(texture);
-
         dataProvider.SetSpriteRects(spriteRects.ToArray());
         dataProvider.Apply();
     }
@@ -261,10 +285,7 @@ public class ProjectPipeline : AssetPostprocessor
         try
         {
             Color[] pixels = tex.GetPixels((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height);
-            foreach (Color p in pixels)
-            {
-                if (p.a > 0.01f) return false;
-            }
+            foreach (Color p in pixels) if (p.a > 0.01f) return false;
             return true;
         }
         catch { return false; }
@@ -294,22 +315,5 @@ public class ProjectPipeline : AssetPostprocessor
             case SpriteAlignment.BottomRight: return new Vector2(1f, 0f);
             default: return new Vector2(0.5f, 0.5f);
         }
-    }
-
-    static void GetImageSize(string path, out int width, out int height)
-    {
-        width = 0; height = 0;
-        try {
-            using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read)) {
-                using (var br = new BinaryReader(fs)) {
-                    fs.Seek(16, SeekOrigin.Begin);
-                    var wBytes = br.ReadBytes(4);
-                    var hBytes = br.ReadBytes(4);
-                    if (System.BitConverter.IsLittleEndian) { System.Array.Reverse(wBytes); System.Array.Reverse(hBytes); }
-                    width = System.BitConverter.ToInt32(wBytes, 0);
-                    height = System.BitConverter.ToInt32(hBytes, 0);
-                }
-            }
-        } catch { }
     }
 }
